@@ -9,6 +9,8 @@ Textos animados para el anuncio vertical (27 s) de la cerveza Ponte en Quatro de
 
 - `renders/transparente/`: los mismos textos con fondo transparente real (ProRes 4444 con alfa), en 4 clips. El número del nombre es el segundo donde va cada uno. Es la opción recomendada, sin bordes verdes.
 
+- `renders/4k/`: **versión final recomendada**. Los textos en 4K (2160×3840) con fondo transparente en formato QuickTime Animation (sin pérdida), que es el que lee CapCut en Mac. Son 3 clips; el número del nombre es el segundo donde va cada uno (0,0 · 8,4 · 18,2). Se colocan encima del vídeo sin croma.
+
 ## Montaje en CapCut
 
 1. Vídeo original en 1080 en la línea de tiempo.
