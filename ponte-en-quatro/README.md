@@ -7,6 +7,8 @@ Textos animados para el anuncio vertical (27 s) de la cerveza Ponte en Quatro de
 - `renders/textos-fondo-verde.mp4`: capa de textos en 1080×1920 sobre verde puro, para montar en CapCut con croma.
 - `renders/vista-previa-720.mp4`: vista previa de los textos sobre el vídeo.
 
+- `renders/transparente/`: los mismos textos con fondo transparente real (ProRes 4444 con alfa), en 4 clips. El número del nombre es el segundo donde va cada uno. Es la opción recomendada, sin bordes verdes.
+
 ## Montaje en CapCut
 
 1. Vídeo original en 1080 en la línea de tiempo.
