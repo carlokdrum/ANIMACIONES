@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Ponte en Quatro — textos</title>
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Oswald"; font-weight: 500; src: url("fonts/oswald-latin-500-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Oswald"; font-weight: 700; src: url("fonts/oswald-latin-700-normal.woff2") format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); }
+
+      :root {
+        --white: #ffffff;
+        --orange: #ff8a1f;
+        --blue: #1c3f78;
+        --shadow: 0 2px 3px rgba(20, 8, 0, 0.75);
+      }
+      html, body { margin: 0; background: transparent; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+      .clip { position: absolute; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; }
+      .top { top: 280px; }
+      .low { top: 1230px; }
+
+      .headline {
+        margin: 0;
+        font-family: "Oswald", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--white);
+        text-shadow: var(--shadow);
+        letter-spacing: 1px;
+        line-height: 1.16;
+        text-align: center;
+      }
+      /* Bloque azul de la etiqueta: se lee sobre cualquier fondo naranja y es sólido (croma limpio) */
+      .accent {
+        display: inline-block;
+        background: var(--blue);
+        color: var(--white);
+        text-shadow: none;
+        padding: 0 0.18em;
+        line-height: 1.12;
+      }
+
+      /* Escena 1-2 */
+      #h1 { font-size: 116px; display: flex; justify-content: center; align-items: flex-end; }
+      .pl { display: inline-block; white-space: pre; }
+      .fw { position: relative; display: inline-block; }
+      .fw .ol { color: transparent; -webkit-text-stroke: 3px #ffffff; text-shadow: none; display: inline-block; }
+      .fw .mk { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; }
+      .fw .fl { display: inline-block; }
+      #h2 { font-size: 112px; }
+      #h2 .accent { font-size: 140px; margin-left: 12px; }
+      .shake { display: inline-block; }
+      .sl { display: inline-block; }
+
+      /* Escena 3: tarjeta de datos */
+      .card {
+        display: flex; flex-direction: column; align-items: center;
+        background: var(--blue);
+        padding: 26px 56px 30px;
+        border-bottom: 8px solid var(--orange);
+      }
+      .stat { font-family: "Oswald", sans-serif; font-weight: 700; font-size: 84px; color: var(--white); line-height: 1.15; text-transform: uppercase; }
+      .stat small { font-weight: 500; font-size: 46px; letter-spacing: 4px; margin-left: 10px; }
+      #st1 { color: var(--orange); }
+      .stamp {
+        margin-top: 30px;
+        padding: 10px 28px;
+        background: var(--orange);
+        font-family: "Oswald", sans-serif; font-weight: 700; font-size: 44px; letter-spacing: 6px;
+        color: var(--blue);
+      }
+
+      /* Escena 4: la explosión tipográfica */
+      #s4 { top: 0; bottom: 0; }
+      #stack { position: absolute; left: 0; right: 0; top: 330px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .word { display: flex; font-family: "Oswald", sans-serif; font-weight: 700; font-size: 116px; text-transform: uppercase; line-height: 1.2; white-space: nowrap; }
+      .word.small { font-size: 46px; letter-spacing: 0; margin-top: 8px; }
+      .ch { display: block; background: var(--blue); color: var(--white); padding: 0 2px; }
+      .ch:first-child { padding-left: 32px; }
+      .ch:last-child { padding-right: 32px; }
+      .hot .ch { background: var(--orange); color: var(--blue); }
+      .small .ch { background: var(--white); color: var(--blue); padding: 6px 4px; }
+      .small .ch:first-child { padding-left: 22px; }
+      .small .ch:last-child { padding-right: 22px; }
+      .small .gap { width: 16px; }
+      .sub {
+        margin: 26px 0 0;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 34px; letter-spacing: 8px;
+        text-transform: uppercase; color: var(--white); text-shadow: var(--shadow);
+      }
+
+      /* Escena 5: columna derecha, sobre la copa */
+      .right { top: 190px; left: auto; right: 44px; width: 500px; align-items: flex-end; }
+      #premium { text-align: right; overflow: visible; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+      #premium .l1 { font-size: 66px; }
+      #premium .accent { font-size: 100px; }
+      #premium .l3 { font-size: 58px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.4" data-fps="30">
+
+      <section id="s1" class="clip top" data-start="0.25" data-duration="2.1" data-track-index="0">
+        <h1 id="h1" class="headline" aria-label="Hay cervezas…">Hay cervezas...</h1>
+      </section>
+
+      <section id="s2" class="clip top" data-start="2.45" data-duration="1.7" data-track-index="0">
+        <h1 id="h2" class="headline"><span id="h2s" class="shake">…y está <span class="accent" id="esta"><span class="sl">E</span><span class="sl">S</span><span class="sl">T</span><span class="sl">A</span><span class="sl">.</span></span></span></h1>
+      </section>
+
+      <section id="s4" class="clip" data-start="8.4" data-duration="4.85" data-track-index="0">
+        <div id="stack" data-layout-allow-overlap>
+          <div class="word" id="w1">Malta.</div>
+          <div class="word" id="w2">Lúpulo.</div>
+          <div class="word hot" id="w3">Dátiles.</div>
+          <div class="word small" id="w4">100% artesanal</div>
+        </div>
+      </section>
+
+      <section id="s5" class="clip right" data-start="18.25" data-duration="4.15" data-track-index="0">
+        <h2 id="premium" class="headline">
+          <span class="l1">La cerveza</span>
+          <span class="accent">Quadrupel</span>
+          <span class="l3">prémium del país.</span>
+        </h2>
+      </section>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const IN = { opacity: 0, y: 40 };
+      const ON = (d = 0.7) => ({ opacity: 1, y: 0, duration: d, ease: "power3.out" });
+      const OUT = (d = 0.35) => ({ opacity: 0, duration: d, ease: "power1.in" });
+
+      // 1. Hay cervezas…  (tres variantes: A se sirve, B se llena, C chorro en arco)
+      const HAY_OPTION = "A";
+      function buildPour() {
+        const FPS = 30, DT = 1 / 240, EVERY = 240 / FPS, EXIT = 2.0;
+        const h = document.getElementById("h1");
+        const text = h.textContent;
+
+        if (HAY_OPTION === "B") {
+          // B. el texto hueco se llena de abajo arriba como un vaso y se vacía antes del corte
+          h.textContent = "";
+          const fw = document.createElement("span"); fw.className = "fw";
+          fw.innerHTML = `<span class="ol"></span><span class="mk"><span class="fl"></span></span>`;
+          fw.querySelector(".ol").textContent = text; fw.querySelector(".fl").textContent = text;
+          h.appendChild(fw);
+          const ol = fw.querySelector(".ol"), mk = fw.querySelector(".mk"), fl = fw.querySelector(".fl");
+          const H = fw.offsetHeight;
+          tl.fromTo(ol, { opacity: 0, scaleX: 1.15, scaleY: 1.15 }, { opacity: 1, scaleX: 1, scaleY: 1, duration: 0.3, ease: "power3.out" }, 0.25);
+          // nivel del líquido: sube acelerando, se pasa un poco y se asienta (muelle)
+          let lv = 0, vl = 0; const kf = [];
+          for (let i = 1, n = Math.round((EXIT - 0.45) / DT); i <= n; i++) {
+            const t = i * DT, target = Math.min(1, t / 0.95);
+            vl += (-260 * (lv - target) - 15 * vl) * DT; lv += vl * DT;
+            if (i % EVERY === 0) { const off = H * (1 - lv); kf.push({ y: off, duration: 1 / FPS, ease: "none" }); }
+          }
+          tl.set(mk, { y: H }, 0); tl.set(fl, { y: -H }, 0);
+          tl.to(mk, { keyframes: kf }, 0.45);
+          tl.to(fl, { keyframes: kf.map((k) => ({ ...k, y: -k.y })) }, 0.45);
+          // se vacía (gravedad) y desaparece el contorno
+          tl.to(mk, { y: H, duration: 0.3, ease: "power2.in" }, EXIT);
+          tl.to(fl, { y: -H, duration: 0.3, ease: "power2.in" }, EXIT);
+          tl.to(ol, { opacity: 0, duration: 0.2, ease: "power1.in" }, EXIT + 0.12);
+          return;
+        }
+
+        h.textContent = "";
+        const els = [...text].map((c) => { const sp = document.createElement("span"); sp.className = "pl"; sp.textContent = c; h.appendChild(sp); return sp; });
+        const letters = els.filter((e, i) => text[i] !== " " && text[i] !== ".");
+        const dots = els.filter((e, i) => text[i] === ".");
+
+        // vuelo con gravedad hasta su sitio, choque con rebote y aplastamiento líquido (muelle)
+        const land = (el, start, dx0, h0, G, T, rot0, bounce, squash, k, c) => {
+          // velocidades iniciales para aterrizar en (0,0) en T segundos (tiro parabólico)
+          const vx = -dx0 / T, vy0 = (h0 - 0.5 * G * T * T) / T;
+          let x = dx0, y = -h0, vy = vy0, landed = false, a = 0, va = 0, t = 0;
+          const kf = [];
+          for (let i = 1, n = Math.round((EXIT - start) / DT); i <= n; i++) {
+            t += DT;
+            if (!landed) {
+              vy += G * DT; y += vy * DT; x += vx * DT;
+              if (t >= T) { landed = true; va = -Math.abs(vy) / 2600 * squash; x = 0; y = 0; vy = -Math.abs(vy) * bounce; }
+            } else {
+              if (y < 0 || vy < 0) { vy += G * DT; y += vy * DT; if (y >= 0) { y = 0; vy = -vy * bounce; if (Math.abs(vy) < 60) vy = 0; } }
+              va += (-k * a - c * va) * DT; a += va * DT;
+            }
+            if (i % EVERY === 0) kf.push({ x, y, rotation: landed ? 0 : rot0 * (1 - t / T), scaleY: 1 - a, scaleX: 1 + a * 0.7, opacity: 1, duration: 1 / FPS, ease: "none" });
+          }
+          tl.set(el, { x: dx0, y: -h0, scaleX: 1, scaleY: 1, rotation: rot0, opacity: 0, transformOrigin: "50% 100%" }, 0);
+          tl.set(el, { opacity: 1 }, start);
+          tl.to(el, { keyframes: kf }, start);
+        };
+
+        if (HAY_OPTION === "C") {
+          // C. chorro en arco desde arriba a la izquierda (la boca de la botella), girando en el aire
+          letters.forEach((el, i) => land(el, 0.25 + i * 0.05, -620 - i * 18, 760, 3000, 0.55, -220 + (i % 3) * 40, 0.2, 1.0, 900, 11));
+          dots.forEach((el, i) => land(el, 1.1 + i * 0.12, -260, 360, 3000, 0.42, 0, 0.42, 0.6, 1100, 14));
+        } else {
+          // A. caen en vertical como al servirse; los puntos gotean
+          letters.forEach((el, i) => land(el, 0.25 + i * 0.045, 0, 520 + (i % 3) * 40, 4200, Math.sqrt(2 * (520 + (i % 3) * 40) / 4200), 0, 0.18, 1.0, 900, 11));
+          dots.forEach((el, i) => land(el, 1.12 + i * 0.13, 0, 300, 4200, Math.sqrt(2 * 300 / 4200), 0, 0.42, 0.6, 1100, 14));
+        }
+
+        // salida: se escurren hacia abajo por gravedad, de izquierda a derecha
+        els.forEach((el, i) => {
+          const t0 = EXIT + i * 0.018, rot = (i % 2 ? 1 : -1) * (4 + (i * 37) % 9);
+          const kf = [];
+          for (let j = 1, n = Math.round((2.36 - t0) * FPS); j <= n; j++) {
+            const t = j / FPS;
+            kf.push({ x: 0, y: 500 * t + 0.5 * 6500 * t * t, rotation: rot * t / 0.3, scaleX: 1, scaleY: 1 + 0.25 * Math.min(1, t / 0.2), opacity: Math.max(0, 1 - t / 0.32), duration: 1 / FPS, ease: "none" });
+          }
+          tl.to(el, { keyframes: kf }, t0);
+        });
+      }
+
+      // 2b. ESTA: cada letra cae desde la cámara y se estampa; cada golpe sacude la frase
+      function buildSlam() {
+        const FPS = 30, DT = 1 / 240;
+        const box = document.getElementById("esta");
+        const letters = [...box.querySelectorAll(".sl")];
+        const BOX_T = 2.86, FIRST = 2.9, STAGGER = 0.075, FALL = 0.14, S0 = 3.4;
+
+        // muelle amortiguado genérico: devuelve fotogramas de x(t) hacia 1 (o 0)
+        const spring = (x0, v0, k, c, target, secs) => {
+          let x = x0, v = v0; const out = [];
+          for (let i = 1, n = Math.round(secs / DT); i <= n; i++) {
+            v += (-k * (x - target) - c * v) * DT; x += v * DT;
+            if (i % (240 / FPS) === 0) out.push(x);
+          }
+          return out;
+        };
+
+        // a) el bloque azul se abre de golpe con rebote
+        tl.set(box, { scaleX: 0, transformOrigin: "0% 50%" }, 0);
+        tl.to(box, { keyframes: spring(0, 14, 700, 24, 1, 0.6).map((v) => ({ scaleX: v, duration: 1 / FPS, ease: "none" })) }, BOX_T);
+
+        // b) cada letra cae desde la cámara (aceleración) y se aplasta al impactar
+        const impacts = [];
+        letters.forEach((el, i) => {
+          const t0 = FIRST + i * STAGGER, ti = t0 + FALL;
+          impacts.push(ti);
+          const kf = [];
+          const nf = Math.round(FALL * FPS);
+          for (let j = 1; j <= nf; j++) {
+            const u = j / nf;                                  // 0→1
+            const sc = 1 + (S0 - 1) * (1 - u * u);              // acelera hacia el plano
+            kf.push({ scaleX: sc, scaleY: sc, opacity: Math.min(1, u * 2.5), duration: 1 / FPS, ease: "none" });
+          }
+          // aplastamiento elástico tras el impacto
+          const sq = spring(0.28, 0, 900, 16, 0, 0.6);
+          sq.forEach((a) => kf.push({ scaleY: 1 - a, scaleX: 1 + a * 0.6, opacity: 1, duration: 1 / FPS, ease: "none" }));
+          tl.set(el, { opacity: 0, scaleX: S0, scaleY: S0, transformOrigin: "50% 60%" }, 0);
+          tl.to(el, { keyframes: kf }, t0);
+        });
+
+        // c) cada impacto sacude la frase entera (suma de vibraciones amortiguadas)
+        const shake = document.getElementById("h2s");
+        const T_START = impacts[0], T_END = impacts[impacts.length - 1] + 0.55;
+        const sk = [];
+        for (let t = T_START + 1 / FPS; t <= T_END; t += 1 / FPS) {
+          let x = 0, y = 0, r = 0;
+          impacts.forEach((ti, i) => {
+            const d = t - ti; if (d < 0) return;
+            const amp = 14 * Math.exp(-9 * d), ph = 2 * Math.PI * 17 * d;
+            x += amp * Math.sin(ph + i * 1.7); y += amp * 0.8 * Math.cos(ph * 1.13 + i); r += amp * 0.06 * Math.sin(ph * 0.9 + i * 2.3);
+          });
+          sk.push({ x, y, rotation: r, duration: 1 / FPS, ease: "none" });
+        }
+        sk.push({ x: 0, y: 0, rotation: 0, duration: 1 / FPS, ease: "none" });
+        tl.set(shake, { x: 0, y: 0, rotation: 0 }, 0);
+        tl.to(shake, { keyframes: sk }, T_START);
+      }
+
+      // 4. Explosión tipográfica con física (determinista: semilla fija, posición = f(t))
+      function buildExplosion() {
+        // trocear cada palabra en letras-pieza
+        document.querySelectorAll("#stack .word").forEach((w) => {
+          const text = w.textContent; w.textContent = "";
+          for (const c of text) {
+            const span = document.createElement("span");
+            if (c === " ") { span.className = "gap"; } else { span.className = "ch"; span.textContent = c; }
+            w.appendChild(span);
+          }
+        });
+
+        // a) las palabras aparecen enteras
+        ["#w1", "#w2", "#w3"].forEach((id, i) =>
+          tl.fromTo(id, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 8.45 + i * 0.25));
+        tl.fromTo("#w4", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 9.3);
+
+        // b) física
+        let seed = 42;
+        const rnd = () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+        const R = (a, b) => a + (b - a) * rnd();
+
+        const T0 = 10.42;         // instante del estallido de la botella
+        const END = 13.2;         // cambio de plano
+        const EX = 540, EY = 700; // núcleo de la explosión
+        const CX = 540, CY = 960; // centro óptico de la cámara
+        const K = 1.7;            // resistencia del aire: frena el impulso inicial
+        const KR = 0.9;           // amortiguación de giro
+        const P = 1400;           // distancia focal
+        const FPS = 30;
+
+        const root = document.getElementById("root").getBoundingClientRect();
+        const pieces = [...document.querySelectorAll("#stack .ch")];
+        tl.set(pieces, { x: 0, y: 0, rotation: 0, rotationX: 0, rotationY: 0, scale: 1, opacity: 1, filter: "blur(0px)", transformPerspective: P }, 0);
+
+        pieces.forEach((el) => {
+          const b = el.getBoundingClientRect();
+          const cx = b.left - root.left + b.width / 2, cy = b.top - root.top + b.height / 2;
+          const dx = cx - EX, dy = cy - EY, dist = Math.hypot(dx, dy) || 1;
+          const ang = Math.atan2(dy, dx) + R(-0.5, 0.5);
+          const speed = R(650, 1150) / (1 + dist / 700);
+          const vx = Math.cos(ang) * speed, vy = Math.sin(ang) * speed;
+          const drift = R(0.05, 0.1);            // velocidad residual: siguen flotando en su dirección
+          const vz0 = R(260, 520), vzr = R(90, 170); // hacia la cámara: estallido y luego deriva lenta
+          const w0 = R(-420, 420), wr = R(-40, 40);
+          const wx0 = R(-130, 130), wxr = R(-15, 15), wy0 = R(-130, 130), wyr = R(-15, 15);
+          const delay = dist / 4200; // la onda expansiva llega antes a lo más cercano
+          const start = T0 + delay, life = END - start;
+          const fadeFrom = R(1.1, 1.7), fadeLen = Math.max(0.5, life - fadeFrom - R(0, 0.2));
+          const e = (k, t) => (1 - Math.exp(-k * t)) / k;
+          const spin = (w, r, t) => r * t + (w - r) * e(KR, t);
+
+          // el fondo de la caja se esfuma en el estallido; queda solo la letra
+          const glyph = el.closest(".hot") ? "#ff8a1f" : "#ffffff";
+          tl.to(el, { backgroundColor: "rgba(0,0,0,0)", color: glyph, textShadow: "0 3px 6px rgba(20,8,0,0.85)", duration: 0.12, ease: "none" }, start);
+
+          const frames = [];
+          const n = Math.ceil(life * FPS);
+          for (let i = 1; i <= n; i++) {
+            const t = i / FPS;
+            // mundo: impulso que se frena + deriva constante, sin gravedad
+            const wxp = cx + vx * (drift * t + (1 - drift) * e(K, t));
+            const wyp = cy + vy * (drift * t + (1 - drift) * e(K, t));
+            const z = Math.min(vzr * t + (vz0 - vzr) * e(K, t), P * 0.8);
+            const sc = P / (P - z);
+            // proyección: al acercarse se alejan del centro de la imagen
+            const pk = 1 + (sc - 1) * 0.35; // empuje de perspectiva suave
+            const sx = CX + (wxp - CX) * pk, sy = CY + (wyp - CY) * pk;
+            const blur = Math.min(8, z / 95);
+            const f = Math.min(1, Math.max(0, (t - fadeFrom) / fadeLen));
+            const op = 1 - f * f * (3 - 2 * f);
+            frames.push({ x: sx - cx, y: sy - cy, scale: sc,
+              rotation: spin(w0, wr, t), rotationX: spin(wx0, wxr, t), rotationY: spin(wy0, wyr, t),
+              opacity: op, filter: `blur(${blur.toFixed(2)}px)`, duration: 1 / FPS, ease: "none" });
+          }
+          tl.to(el, { keyframes: frames }, start);
+        });
+      }
+
+      // 5. La cerveza Quadrupel prémium del país.
+      // Cada línea cae como el lúpulo y se apila sobre la anterior (física simulada, determinista)
+      function buildDrop() {
+        let seed = 7;
+        const rnd = () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+        const R = (a, b) => a + (b - a) * rnd();
+        const G = 1900;            // gravedad px/s² (ritmo de cámara lenta, como el lúpulo)
+        const BOUNCE = 0.3;        // restitución del primer choque
+        const KS = 900, CS = 26;   // apoyo: muelle amortiguado tras aterrizar
+        const KT = 160, CT = 13;   // la línea se endereza al asentarse
+        const STOP = 21.95, DT = 1 / 240, FPS = 30;
+        const root = document.getElementById("root").getBoundingClientRect();
+
+        // de abajo arriba: la primera en caer es la base de la pila
+        const lines = [
+          { id: "#premium .l3", start: 18.3 },
+          { id: "#premium .accent", start: 18.85 },
+          { id: "#premium .l1", start: 19.4 },
+        ].map((L) => {
+          const el = document.querySelector(L.id), b = el.getBoundingClientRect();
+          const y0 = -(b.bottom - root.top) - R(60, 160);   // empieza por encima del encuadre
+          const vy0 = R(0, 120);
+          const tf = (-vy0 + Math.sqrt(vy0 * vy0 + 2 * G * -y0)) / G; // tiempo de caída
+          return { ...L, el, y0, vy0, tf, land: L.start + tf, x0: R(-50, 50), th0: R(-22, 22), w0: R(-70, 70), vImpact: vy0 + G * tf };
+        });
+
+        lines.forEach((L, i) => {
+          const above = lines[i + 1];          // la línea que caerá encima
+          let y = L.y0, vy = L.vy0, th = L.th0, w = L.w0, landed = false, nudged = false;
+          const frames = [];
+          const steps = Math.round((STOP - L.start) / DT), every = Math.round(1 / FPS / DT);
+          for (let k = 1; k <= steps; k++) {
+            const tAbs = L.start + k * DT, t = k * DT;
+            if (!landed) {
+              vy += G * DT; y += vy * DT; th += w * DT;
+              if (y >= 0) { landed = true; y = 0; vy = -vy * BOUNCE; }
+            } else {
+              vy += (-KS * y - CS * vy) * DT; y += vy * DT;
+              w += (-KT * th - CT * w) * DT; th += w * DT;
+              if (above && !nudged && tAbs >= above.land) { nudged = true; vy += above.vImpact * 0.18; }
+            }
+            if (k % every === 0) {
+              const x = landed ? 0 : L.x0 * (1 - Math.min(1, t / L.tf));
+              frames.push({ x, y, rotation: th, duration: 1 / FPS, ease: "none" });
+            }
+          }
+          tl.set(L.el, { x: L.x0, y: L.y0, rotation: L.th0 }, 0);
+          tl.to(L.el, { keyframes: frames }, L.start);
+        });
+      }
+      tl.to("#premium", OUT(0.4), 21.95);
+
+      document.fonts.ready.then(() => {
+        buildPour();
+        buildSlam();
+        buildExplosion();
+        buildDrop();
+        window.__timelines["main"] = tl;
+      });
+    </script>
+  </body>
+</html>
