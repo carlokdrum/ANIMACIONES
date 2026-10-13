@@ -1,8 +1,17 @@
 # Logo ALFIO LORA
 
-## Versión cinematográfica compleja (8 s) · `alfio-lora-cinematica.mp4`
+## Versión cinematográfica (10 s) · `alfio-lora-cinematica.mp4`
 
-1920×1080 sobre negro. El logo se construye solo: la onda entra como una serpiente siguiendo su recorrido y el monograma y las letras se trazan a lo largo de su forma. Cuatro planos de cámara: primerísimo plano persiguiendo a la serpiente, contrapicado en perspectiva sobre el monograma, travelling por el nombre y plano general de revelación con destello. Barridos con desenfoque de movimiento en los cortes. Se genera con `python3 cinematica.py` (necesita numpy, pillow, scipy y scikit-image).
+1920×1080 sobre negro. El logo se construye solo y el ritmo alterna calma y ráfagas:
+
+1. 0–2,8 s (lento): primerísimo plano que se desliza con la serpiente mientras entra despacio.
+2. 2,9–4,2 s (rápido): tres cortes desde ángulos distintos mientras la serpiente acelera y termina.
+3. 4,2–5,6 s (lento): órbita en contrapicado alrededor del monograma, que se traza solo.
+4. 5,6–7 s (rápido): travelling por el nombre mientras se escribe.
+5. 7–8 s: la cámara se aleja y baja la luz.
+6. 8 s: impacto: golpe de cámara, destello blanco, sacudida y bloom; reflejo de luz y pulso de brillo hasta el final.
+
+Se genera con `python3 cinematica.py` (necesita numpy, pillow, scipy y scikit-image).
 
 ## Primera versión (5 s)
 

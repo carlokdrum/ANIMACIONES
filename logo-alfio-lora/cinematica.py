@@ -14,7 +14,7 @@ from PIL import Image, ImageFilter
 from scipy import ndimage
 from skimage.morphology import skeletonize
 
-OUT_W, OUT_H, FPS, DUR = 1920, 1080, 30, 8.0
+OUT_W, OUT_H, FPS, DUR = 1920, 1080, 30, 10.0
 LOGO_W = 2400
 
 # ---------------------------------------------------------------- logo y regiones
@@ -85,13 +85,15 @@ smooth = lambda u: (lambda v: v * v * (3 - 2 * v))(min(1.0, max(0.0, u)))
 ease_out = lambda u: 1 - (1 - min(1.0, max(0.0, u))) ** 3
 
 def snake_head(t):
-    """Avance de la serpiente con ritmo irregular (acelera y frena) entre 0.15 s y 3.4 s."""
-    u = min(1.0, max(0.0, (t - 0.15) / 3.25))
-    return min(1.0, u + 0.035 * math.sin(u * math.pi * 7) * math.sin(u * math.pi)) if u < 1 else 1.0
+    """Ritmo de contraste: avanza despacio (0.2-2.8 s, hasta el 40 %) y acelera (3.0-4.2 s, hasta el final)."""
+    if t < 0.2: return 0.0
+    if t < 2.8: return 0.40 * smooth((t - 0.2) / 2.6) ** 0.9
+    if t < 3.0: return 0.40
+    return min(1.0, 0.40 + 0.60 * smooth((t - 3.0) / 1.2))
 
-TRACE = {regions["mono"][0]: (2.0, 1.2)}
-if len(regions["mono"]) > 1: TRACE[regions["mono"][1]] = (2.6, 0.9)
-for i, rid in enumerate(regions["texto"]): TRACE[rid] = (3.7 + i * 0.2, 0.55)
+TRACE = {regions["mono"][0]: (4.2, 1.1)}
+if len(regions["mono"]) > 1: TRACE[regions["mono"][1]] = (4.6, 0.9)
+for i, rid in enumerate(regions["texto"]): TRACE[rid] = (5.65 + i * 0.13, 0.35)
 
 def build(t):
     """Imagen premultiplicada del logo en construcción (en coordenadas del logo) y posición de la cabeza."""
@@ -100,7 +102,7 @@ def build(t):
     on = owner == 1
     h = snake_head(t)
     vis = np.where(on, np.clip((h - param) / 0.006 + 0.5, 0, 1), vis)
-    hot = np.where(on, np.exp(-((param - h) / 0.025) ** 2) * (param <= h + 0.01) * (1 - smooth((t - 3.3) / 0.4)), 0)
+    hot = np.where(on, np.exp(-((param - h) / 0.025) ** 2) * (param <= h + 0.01) * (1 - smooth((t - 4.1) / 0.4)), 0)
     for rid, (t0, d) in TRACE.items():
         u = (t - t0) / d
         if u <= 0: continue
@@ -135,29 +137,52 @@ def homography(cx, cy, zoom, yaw=0.0, pitch=0.0, roll=0.0):
     return tuple(Hi.flatten()[:8])
 
 lerp = lambda a, b, u: a + (b - a) * u
-cam_state = {"hx": None, "hy": None}
+cam_state = {"shot": None, "hx": 0.0, "hy": 0.0}
+
+def follow(shot, hx, hy, k=0.3):
+    """Sigue la cabeza de la serpiente con suavizado; se reinicia en cada corte."""
+    if cam_state["shot"] != shot:
+        cam_state.update(shot=shot, hx=hx, hy=hy)
+    cam_state["hx"] += (hx - cam_state["hx"]) * k; cam_state["hy"] += (hy - cam_state["hy"]) * k
+    return cam_state["hx"], cam_state["hy"]
+
+CUTS = [2.9, 3.4, 3.8, 4.2, 5.6, 7.0]
 
 def camera(t, head):
     """Plano de cámara en el instante t: (cx, cy, zoom, yaw, pitch, roll)."""
     hx, hy = head
-    if t < 2.2:                                    # 1) primerísimo plano persiguiendo a la serpiente
-        if cam_state["hx"] is None: cam_state["hx"], cam_state["hy"] = hx, hy
-        cam_state["hx"] += (hx - cam_state["hx"]) * 0.35; cam_state["hy"] += (hy - cam_state["hy"]) * 0.25
-        return (cam_state["hx"] + 120, cam_state["hy"], 2.5 - 0.3 * t / 2.2, 8 * math.sin(t * 2.1), -6, 5 * math.sin(t * 1.6))
-    if t < 3.6:                                    # 2) contrapicado en perspectiva sobre el monograma
-        u = (t - 2.2) / 1.4
-        return (lerp(LW * 0.30, LW * 0.36, u), LH * 0.42, lerp(1.55, 1.35, u), lerp(-38, -30, u), lerp(22, 16, u), -6)
-    if t < 5.4:                                    # 3) travelling lateral por el nombre
-        u = smooth((t - 3.6) / 1.8)
-        return (lerp(LW * 0.12, LW * 0.88, u), LH * 0.86, 2.0, lerp(12, -12, u), -10, 0)
-    u = ease_out((t - 5.4) / 1.9)                  # 4) revelación: se aleja girando hasta el plano general
-    return (lerp(LW * 0.70, LW * 0.5, u), lerp(LH * 0.70, LH * 0.5, u), lerp(2.3, 1.0, u) + 0.05 * smooth((t - 7.0) / 1.0),
-            lerp(40, 0, u), lerp(-18, 0, u), lerp(10, 0, u))
+    if t < 2.9:                                    # 1) lento: primerísimo plano que se desliza con la serpiente
+        x, y = follow(1, hx, hy, 0.12)
+        return (x + 90, y, lerp(2.7, 2.3, t / 2.9), lerp(10, 4, t / 2.9), -5, 0)
+    if t < 3.4:                                    # 2a) rápido: ángulo lateral derecho
+        x, y = follow(2, hx, hy, 0.4); return (x + 60, y, 2.2, 32, -8, 4)
+    if t < 3.8:                                    # 2b) rápido: ángulo contrario, desde abajo
+        x, y = follow(3, hx, hy, 0.4); return (x + 60, y, 2.0, -30, 16, -7)
+    if t < 4.2:                                    # 2c) rápido: más abierto, contrapicado
+        x, y = follow(4, hx, hy, 0.4); return (x, y - 80, 1.45, -12, 26, 3)
+    if t < 5.6:                                    # 3) lento: órbita en contrapicado alrededor del monograma
+        u = smooth((t - 4.2) / 1.4)
+        return (LW * 0.33, LH * 0.42, lerp(1.6, 1.4, u), lerp(-40, 18, u), lerp(20, 14, u), lerp(-5, 3, u))
+    if t < 7.0:                                    # 4) rápido: travelling por el nombre mientras se escribe
+        u = smooth((t - 5.6) / 1.3)
+        return (lerp(LW * 0.10, LW * 0.92, u), LH * 0.86, 2.1, lerp(14, -14, u), -10, 0)
+    if t < 8.0:                                    # 5) calma: se aleja despacio hasta el plano general
+        u = ease_out((t - 7.0) / 1.0)
+        return (lerp(LW * 0.62, LW * 0.5, u), lerp(LH * 0.62, LH * 0.5, u), lerp(1.9, 1.08, u), lerp(24, 0, u), lerp(-12, 0, u), lerp(6, 0, u))
+    d = t - 8.0                                    # 6) impacto: golpe de cámara hacia el logo y sacudida
+    punch = 0.16 * math.exp(-5 * d) * math.cos(9 * d)
+    shake = 22 * math.exp(-7 * d)
+    return (LW * 0.5 + shake * math.sin(70 * d), LH * 0.5 + shake * math.cos(83 * d), 1.0 + punch + 0.04 * smooth(d / 2.0), 0, 0, 0.6 * math.exp(-6 * d) * math.sin(50 * d))
 
-CUTS = [2.2, 3.6, 5.4]
 def whip(t):
     """Intensidad del barrido en los cortes (desenfoque de movimiento horizontal)."""
-    return max([math.exp(-((t - c) / 0.07) ** 2) for c in CUTS] + [0.0])
+    return max([math.exp(-((t - c) / 0.05) ** 2) for c in CUTS] + [0.0])
+
+def exposure(t):
+    """Baja la luz antes del golpe (7.3-8.0 s) y destello blanco en el impacto."""
+    dip = 1 - 0.55 * smooth((t - 7.3) / 0.6) if t < 8.0 else 1.0
+    flash = 0.95 * math.exp(-max(0, t - 8.0) / 0.18) if t >= 8.0 else 0.0
+    return dip, flash
 
 proc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{OUT_W}x{OUT_H}",
     "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-crf", "14", "-preset", "slow", "-pix_fmt", "yuv420p",
@@ -169,13 +194,18 @@ for f in range(int(DUR * FPS)):
     img, head, hot = build(t)
 
     # destello final: bloom y reflejo de luz que recorre el logo terminado
-    sweep_u = (t - 6.1) / 0.9
+    sweep_u = (t - 8.25) / 0.9
     if 0 < sweep_u < 1:
         c = -400 + (LW + LH * 0.5 + 800) * smooth(sweep_u)
         band = np.exp(-(((xx + yy * 0.5) - c) / 110) ** 2)[..., None]
         img[..., :3] = np.minimum(img[..., 3:4], img[..., :3] + band * 0.9 * img[..., 3:4])
+    dip, flash = exposure(t)
+    if flash > 0.01:                                # destello: el logo se quema a blanco y vuelve
+        img[..., :3] = img[..., :3] + (img[..., 3:4] - img[..., :3]) * flash
+    img[..., :3] *= dip; img[..., 3] = np.maximum(img[..., 3] * 1.0, 0)
     pil = Image.fromarray((np.clip(img, 0, 1) * 255).astype(np.uint8), "RGBa")
-    glow_amt = 0.35 + 0.5 * math.exp(-((t - 6.0) / 0.25) ** 2)
+    pulse = 0.12 * (0.5 + 0.5 * math.sin((t - 8.6) * 2 * math.pi / 1.1)) if t > 8.6 else 0.0
+    glow_amt = (0.35 + 1.3 * math.exp(-max(0, t - 8.0) / 0.35) * (t >= 8.0) + pulse) * dip
     glow = pil.resize((LW // 4, LH // 4), Image.BILINEAR).filter(ImageFilter.GaussianBlur(10)).resize((LW, LH), Image.BILINEAR)
 
     # cámara (con submuestras de movimiento en los barridos)
