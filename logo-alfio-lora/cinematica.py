@@ -52,6 +52,8 @@ def geodesic_param(rid, start_key):
     """Recorrido de construcción: distancia geodésica sobre el esqueleto desde un extremo."""
     m = owner == rid
     sk = skeletonize(m & (alpha > 0.5))
+    skl, _ = ndimage.label(sk, structure=np.ones((3, 3)))       # solo el trazo principal del esqueleto
+    sk = skl == (np.bincount(skl.ravel())[1:].argmax() + 1)
     pts = np.argwhere(sk)
     key = {"izq": pts[:, 1], "abajo_izq": pts[:, 1] - pts[:, 0], "abajo": -pts[:, 0], "arriba_izq": pts[:, 1] + pts[:, 0]}[start_key]
     st = tuple(pts[np.argmin(key)])
