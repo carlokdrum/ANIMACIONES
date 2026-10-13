@@ -2,16 +2,15 @@
 
 ## Versión cinematográfica (10 s) · `alfio-lora-cinematica.mp4`
 
-1920×1080 sobre negro. El logo se construye solo y el ritmo alterna calma y ráfagas:
+1920×1080 sobre negro. El logo se construye solo:
 
-1. 0–2,8 s (lento): primerísimo plano que se desliza con la serpiente mientras entra despacio.
-2. 2,9–4,2 s (rápido): tres cortes desde ángulos distintos mientras la serpiente acelera y termina.
-3. 4,2–5,6 s (lento): órbita en contrapicado alrededor del monograma, que se traza solo.
-4. 5,6–7 s (rápido): travelling por el nombre mientras se escribe.
-5. 7–8 s: la cámara se aleja y baja la luz.
-6. 8 s: impacto: golpe de cámara, destello blanco, sacudida y bloom; reflejo de luz y pulso de brillo hasta el final.
+1. 0,2–3,6 s: la onda entra como una serpiente a velocidad constante. Tres planos: primerísimo plano, contrapicado lateral y picado más abierto. Cabeza de luz con destello anamórfico.
+2. 3,6–5 s: el monograma se traza solo, con dolly lento en contrapicado.
+3. 5–7,2 s: las letras se trazan mientras caen desde la cámara y se estampan con rebote y sacudida, con tres ángulos de cámara.
+4. 7,25 s: corte a negro.
+5. 7,45 s: impacto: el logo irrumpe con la cámara saliendo hacia atrás, destello blanco, onda expansiva de luz, destello anamórfico, sacudida y bloom. Después, reflejos que recorren el metal y pulso de brillo.
 
-Se genera con `python3 cinematica.py` (necesita numpy, pillow, scipy y scikit-image).
+Durante toda la pieza una luz que gira saca brillos en los biseles del metal. El recorrido de construcción se calcula por dentro de cada forma para que el frente avance limpio. Se genera con `python3 cinematica.py` (numpy, pillow, scipy, scikit-image).
 
 ## Primera versión (5 s)
 
